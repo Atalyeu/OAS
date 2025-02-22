@@ -1,5 +1,5 @@
 all:
-	nasm -f bin ./src/bootloader.asm - o ./bin/bootloader.bin
+	nasm -f bin ./src/boot.asm -o ./bin/boot.bin
 
 clean:
-	rm -f ./bin/bootloader.bin
+	rm -f ./bin/boot.bin
