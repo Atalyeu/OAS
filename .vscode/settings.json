@@ -57,5 +57,10 @@
   "C_Cpp_Runner.useLinkTimeOptimization": false,
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "scm.compactFolders": false,
-  "makefile.configureOnOpen": true
+  "makefile.configureOnOpen": true,
+  "files.associations": {
+    "string.h": "c",
+    "stdint.h": "c",
+    "stddef.h": "c"
+  }
 }
