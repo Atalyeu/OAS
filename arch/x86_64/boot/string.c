@@ -7,54 +7,11 @@
 void* memcpy(void* restrict dest, const void* restrict src, size_t count) {
     if (!dest || !src) return NULL; // Safety check
 
-    __asm__ volatile (
-        "cmp $16, %2         \n\t" // If count < 16, jump to tail copy
-        "jb 1f               \n\t"
-
-        "movq %0, %%rdi      \n\t" // dest in RDI
-        "movq %1, %%rsi      \n\t" // src in RSI
-        "movq %2, %%rcx      \n\t" // count in RCX
-        "shr $4, %%rcx       \n\t" // count /= 16 (number of 16-byte chunks)
-
-        "rep movdqu          \n\t" // Copy 16 bytes per iteration
-        "1:                  \n\t"
-
-        "movq %2, %%rcx      \n\t" // Restore count
-        "and $15, %%rcx      \n\t" // count % 16 (remaining bytes)
-        "rep movsb           \n\t" // Copy remaining bytes
-        :
-        : "r"(dest), "r"(src), "r"(count)
-        : "rdi", "rsi", "rcx", "memory"
-    );
-
     return dest;
 }
 
 void* memset(void* dest, int val, size_t count) {
     if (!dest) return NULL; // Safety check
-
-    uint64_t v64 = (uint64_t)(unsigned char)val * 0x0101010101010101ULL;
-
-    __asm__ volatile (
-        "cmp $16, %2         \n\t" // If count < 16, jump to tail set
-        "jb 1f               \n\t"
-
-        "movq %0, %%rdi      \n\t" // dest in RDI
-        "movq %2, %%rcx      \n\t" // count in RCX
-        "shr $4, %%rcx       \n\t" // count /= 16
-
-        "movdqu %1, %%xmm0   \n\t" // Load value into SSE register
-        "rep stosq           \n\t" // Set 16 bytes per iteration
-        "1:                  \n\t"
-
-        "movq %2, %%rcx      \n\t" // Restore count
-        "and $15, %%rcx      \n\t" // count % 16
-        "rep stosb           \n\t" // Set remaining bytes
-        :
-        : "r"(dest), "r"(v64), "r"(count)
-        : "rdi", "rcx", "xmm0", "memory"
-    );
-
     return dest;
 }
 

@@ -11,15 +11,12 @@ x86_64_object_files := $(x86_64_c_object_files) $(x86_64_asm_object_files)
 
 $(x86_64_c_object_files): build/arch/x86_64/%.o : arch/x86_64/%.c
 	mkdir -p $(dir $@) && \
-	x86_64-elf-gcc -c -I intf -ffreestanding -Wall -Wextra $(patsubst build/arch/x86_64/%.o, arch/x86_64/%.c, $@) -o $@  
-# TODO: -I TAG NEED TO BE CHANGED FROM intf TO ./include
+	x86_64-elf-gcc -c -I ./include -ffreestanding -Wall -Wextra $(patsubst build/arch/x86_64/%.o, arch/x86_64/%.c, $@) -o $@  
 
 
 $(kernel_object_files): build/kernel/%.o : kernel/%.c
 	mkdir -p $(dir $@) && \
-	x86_64-elf-gcc -c -I intf -ffreestanding -Wall -Wextra $(patsubst build/kernel/%.o, kernel/%.c, $@) -o $@ 
-# TODO: -I TAG NEED TO BE CHANGED FROM intf TO ./include
-
+	x86_64-elf-gcc -c -I ./include -ffreestanding -Wall -Wextra $(patsubst build/kernel/%.o, kernel/%.c, $@) -o $@ 
 
 $(x86_64_asm_object_files): build/x86_64/%.o : x86_64/%.asm
 	mkdir -p $(dir $@) && \
